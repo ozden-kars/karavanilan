@@ -515,7 +515,7 @@
                     // For videos, add a play icon overlay
                     gallery.innerHTML += `
                         <div class="video-container" onclick="openModal(${i})">
-                            <video>
+                            <video controls loading="lazy">
                                 <source src="${mediaItem}" type="video/mp4">
                             </video>
                             <div class="play-icon">▶️</div>
@@ -524,7 +524,7 @@
                 } else {
                     // For images, display normally
                     gallery.innerHTML += `
-                        <img src="${mediaItem}" alt="Caravan Photo ${i + 1}" onclick="openModal(${i})">
+                        <img src="${mediaItem}" alt="Caravan Photo ${i + 1}" loading = "lazy" onclick="openModal(${i})">
                     `;
                 }
             }
