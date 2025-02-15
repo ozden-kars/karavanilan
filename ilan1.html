@@ -17,18 +17,17 @@
         }
         header {
             display: flex;
+            flex-direction: column;
             align-items: center;
             background: #083153;
             color: white;
-            padding: 0;
             text-align: center;
-            height: 200px; /* Adjust height as needed */
+            padding: 1rem;
         }
         header .title {
-            flex: 1;
-            padding: 1rem;
-            font-size: 3rem;
+            font-size: 2rem;
             font-weight: bold;
+            text-align: center;
         }
 
         li {
@@ -42,26 +41,25 @@
             flex: 1;
         }
 
-        
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             padding: 1rem 0;
-            position: relative; /* Required for absolute positioning of buttons */
         }
+
         .gallery img, .gallery video {
             width: 100%;
             height: 200px;
             object-fit: cover;
             border-radius: 10px;
-            cursor: pointer;
             transition: transform 0.3s ease;
-            position: relative; /* Required for absolute positioning of play icon */
         }
+
         .gallery img:hover, .gallery video:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
+
         .play-icon {
             position: absolute;
             top: 50%;
@@ -141,38 +139,34 @@
             margin: 1rem 0;
             background-color: rgb(255, 222, 169);
         }
-        .features-table th, .features-table td {
+
+         .features-table th, .features-table td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
+            font-size: 16px;
         }
         .features-table th {
             background-color: rgba(255, 21, 0, 0.853);
             color: white;
         }
-
         .pricing-section {
             display: flex;
-            justify-content: space-between; /* Adjust spacing */
-            align-items: center; /* Align items vertically */
-            gap: 20px; /* Optional: Adds spacing between boxes */
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             text-align: center;
             padding: 1rem 0;
         }
-
         .price-box, .contact-box {
-            flex: 1; /* Makes both boxes take equal width */
+            width: 100%;
+            max-width: 400px;
             padding: 1rem;
             border: 1px solid #ddd;
             border-radius: 10px;
-            text-align: center;
             background-color: rgb(255, 222, 169);
-            border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: auto;
         }
-
         .price-box h3 {
             margin: 0.5rem 0;
             color: rgba(255, 21, 0, 0.853);
@@ -202,16 +196,12 @@
             padding: 1rem;
             margin-top: auto;
         }
-
         .navbar {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
             background-color: #333;
-            padding: 10px 20px;
+            padding: 10px;
         }
-
-        /* Logo Styling */
         .logo a {
             color: white;
             font-size: 20px;
@@ -223,6 +213,9 @@
         @media (max-width: 768px) {
             .gallery {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            .features-table th, .features-table td {
+                font-size: 14px;
             }
             .modal-content {
                 max-width: 95%;
@@ -238,8 +231,15 @@
         }
 
         @media (max-width: 480px) {
-            .gallery {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gallery {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            .features-table th, .features-table td {
+                font-size: 12px;
+                padding: 8px;
+            }
+            .title {
+                font-size: 1.5rem;
             }
             .price-box {
                 padding: 0.5rem;
