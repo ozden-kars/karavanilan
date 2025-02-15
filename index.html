@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Latest announcements for caravans available for sale or rent">
+    <meta name="keywords" content="caravan, announcements, sale, rent">
+    <title>Karavan Duyuruları</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: rgb(198, 214, 252);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            background: #083153;
+            color: white;
+            padding: 0;
+            text-align: center;
+            height: 200px; /* Adjust height as needed */
+        }
+
+        header .title {
+            flex: 1;
+            padding: 1rem;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Stack sections vertically */
+            align-items: center; /* Center sections horizontally */
+            
+        }
+
+        .announcement {
+            background-color: rgb(255, 222, 169);
+            margin: 15px 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 600px;
+        }
+
+        .announcement-link {
+            text-decoration: none; /* Remove underline from the link */
+            color: inherit;        /* Inherit color from parent */
+            display: block;        /* Make the entire link area clickable */
+            width: 100%;
+        }
+
+        .announcement-content {
+            display: flex;
+            align-items: center;
+            cursor: pointer;      /* Change cursor to pointer to indicate it's clickable */
+            gap: 15px; /* Space between image and text */
+            max-width: 600px; /* Adjust as needed */
+            margin: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            flex-wrap: wrap; /* Allows content to stack on smaller screens */
+        }
+
+        .announcement img {
+            width: 20%;  /* Default size */
+            max-width: 200px;
+            height: auto;
+            object-fit: cover; /* Ensures images fill the area without distortion */
+            border-radius: 8px;
+        }
+
+        .announcement-text {
+            flex: 1; /* Allow text to take remaining space */
+        }
+
+        .announcement h3 {
+            margin: 0 0 10px;
+            color: rgba(255, 21, 0, 0.853);
+        }
+
+        .announcement p {
+            margin: 10px 0;
+        }
+
+        .announcement .date {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            margin-top: auto;
+        }
+
+        .announcement img {
+            width: 100%;       /* Make the image responsive */
+            height: auto;      /* Maintain aspect ratio */
+            border-radius: 5px; /* Optional: rounded corners */
+            margin-top: 15px;  /* Space between title and image */
+            margin-bottom: 15px; /* Space between image and content */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            main {
+                padding: 10px;
+            }
+
+            .announcement {
+                padding: 15px;
+            }
+
+            .announcement h3 {
+                font-size: 1.2em;
+            }
+
+            footer p {
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.2em;
+            }
+
+            .announcement {
+                padding: 10px;
+            }
+
+            .announcement h3 {
+                font-size: 1em;
+            }
+
+            footer p {
+                font-size: 0.7em;
+            }
+        }
+        @media (max-width: 600px) {
+            .announcement-content {
+                flex-direction: column; /* Stack image and text on small screens */
+                align-items: center;
+                text-align: center;
+            }
+
+            .announcement-image {
+                width: 50%;  /* Make image full width */
+                height: auto; /* Maintain aspect ratio */
+                max-width: 200px; /* Prevents image from becoming too large */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="title">SATILIK KARAVAN İLANLARI</div>
+</header>
+
+<main>
+    <section class="announcement">
+        <a href="ilan1.html" class="announcement-link">
+            <div class="announcement-content">
+                <img src="photos/otobüs/karavan ön 1.JPG" alt="otobüs karavan" class="announcement-image">
+                <div class="announcement-text">
+                    <h3>2000 Model Mercedes Otobüs Karavan</h3>
+                    <p>Fiyat: 8.500.000 TL</p>
+                    <p class="date">ANKARA</p>
+                </div>
+            </div>
+        </a>
+    </section>
+
+    <section class="announcement">
+        <a href="ilan2.html" class="announcement-link">
+            <div class="announcement-content">
+                <img src="photos/çekme/ön.jpg" alt="çekme karavan" class="announcement-image">
+                <div class="announcement-text">
+                    <h3>Çekme Karavan</h3>
+                    <p>Fiyat: 70.000 TL</p>
+                    <p class="date">ANKARA</p>
+                </div>
+            </div>
+        </a>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Satılık Karavan İlanları.</p>
+</footer>
+
+</body>
+</html>

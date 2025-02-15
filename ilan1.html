@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caravan Display</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: rgb(198, 214, 252);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            background: #083153;
+            color: white;
+            padding: 0;
+            text-align: center;
+            height: 200px; /* Adjust height as needed */
+        }
+        header .title {
+            flex: 1;
+            padding: 1rem;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        li {
+            font-size: 20px; /* Adjust the size as needed */
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 1rem;
+            flex: 1;
+        }
+
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 1rem 0;
+            position: relative; /* Required for absolute positioning of buttons */
+        }
+        .gallery img, .gallery video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative; /* Required for absolute positioning of play icon */
+        }
+        .gallery img:hover, .gallery video:hover {
+            transform: scale(1.1);
+        }
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: white;
+            opacity: 0.8;
+            pointer-events: none; /* Ensure the icon doesn't block clicks */
+        }
+        .video-container {
+            position: relative;
+            display: inline-block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #083153;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal img, .modal video {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .nav-arrow.left {
+            left: 10px;
+        }
+        .nav-arrow.right {
+            right: 10px;
+        }
+        .features-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background-color: rgb(255, 222, 169);
+        }
+        .features-table th, .features-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .features-table th {
+            background-color: rgba(255, 21, 0, 0.853);
+            color: white;
+        }
+
+        .pricing-section {
+            display: flex;
+            justify-content: space-between; /* Adjust spacing */
+            align-items: center; /* Align items vertically */
+            gap: 20px; /* Optional: Adds spacing between boxes */
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .price-box, .contact-box {
+            flex: 1; /* Makes both boxes take equal width */
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            background-color: rgb(255, 222, 169);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .price-box h3 {
+            margin: 0.5rem 0;
+            color: rgba(255, 21, 0, 0.853);
+        }
+        .price-box p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .contact-box h3 {
+            margin: 0.5rem 0;
+            color: rgba(255, 21, 0, 0.853);
+        }
+        .contact-box p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .features-table th, td{
+            font-size: 20px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            margin-top: auto;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+        }
+
+        /* Logo Styling */
+        .logo a {
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            .modal-content {
+                max-width: 95%;
+                max-height: 95%;
+            }
+            .nav-arrow {
+                font-size: 1.5rem;
+            }
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            .price-box {
+                padding: 0.5rem;
+            }
+            .price-box p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Tüm İlanlar</a>
+            </div>
+        </nav>
+        <div class="title">SATILIK 2000 MODEL MERCEDES OTOBÜS KARAVAN</div>
+    </header>
+    <div class="container">
+        <div class="gallery" id="gallery">
+            <!-- Media items will be dynamically inserted here -->
+            <button class="nav-arrow left" onclick="navigate(-1)">&#10094;</button>
+            <button class="nav-arrow right" onclick="navigate(1)">&#10095;</button>
+        </div>
+
+        <table class="features-table">
+            <tr>
+                <th></th>
+                <th>Açıklama</th>
+            </tr>
+            <tr>
+                <td>Araba Özellikleri</td>
+                <td>
+                    <ul>
+                        <li>2000 model O345 Mercedes Otomatik Vites</li>
+                        <li>19 bin km</li>
+                        <li>M1 Motokaravan</li>
+                        <li>Ruhsatlı</li>
+                        <li>Muayenesi ve tüm bakımları yapılmıştır.</li>
+                        <li>B sınıfı ehliyetle kullanılabilir.</li>
+                        <li>6 lastik yenidir.</li>
+                        <li>Otomatik şanzıman</li>
+                        <li>4 adet güvenlik ve park (geri görüş özellikli) kamera sistemi</li>
+                        <li>Şoför yanı hostes koltuğu</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Yatak Kapasitesi</td>
+                <td>
+                    <ul>
+                        <li>9 kişiye kadar konaklama alanı mevcut</li>
+                        <li>Ön oturma grubu yatak olarak kullanılabilir.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>İç Özellikler</td>
+                <td>
+                    <ul>
+                        <li>Çift kapaklı ve donduruculu buzdolabı (220 V)</li>
+                        <li>Ankastre mutfak iki gözlü ocak</li>
+                        <li>Evye</li>
+                        <li>Mutfak Bataryası</li>
+                        <li>Gazlı Fırın</li>
+                        <li>Mini Bulaşık Makinesi</li>
+                        <li>Çamaşır Makinesi</li>
+                        <li>Su Isıtıcısı</li>
+                        <li>Hidrofor</li>
+                        <li>Şofben</li>
+                        <li>Duş</li>
+                        <li>Akıllı TV</li>
+                    </ul> 
+                </td>
+            </tr>
+            <tr>
+                <td>Dış Özellikler</td>
+                <td>
+                    <ul>
+                        <li>Dış Duş</li>
+                        <li>Atık Su Deposu</li>
+                        <li>Temiz Su Deposu</li>
+                        <li>Yan Tente</li>
+                        <li>Dış Mutfak (Tek gözlü Ocak)</li>
+                        <li>2 adet tavan heki</li>
+                        <li>9 adet karavan Camı</li>
+                        <li>Sürüş ön ve yan camları için perde</li>
+                        <li>Karavan Basamağı</li>
+                        <li>Arka ve önde Çeki demiri</li>
+                        <li>Dış mutfak 220 V priz</li>
+                    </ul> 
+                </td>
+            </tr>
+            <tr>
+                <td>İç Mekan-Mobilya- Döşeme</td>
+                <td>
+                    <ul>
+                        <li>Laminant kamplama zemin döşeme</li>
+                        <li>Marin lamine Kaplama Kontraplak mobilya</li>
+                        <li>Dekoratif Kapitone Duvar Kaplaması</li>
+                        <li>Kumaş Koltuk Kaplama</li>
+                        <li>Poliüretan/xps mineral yünlü ve nem bariyerli yalıtım</li>
+                        <li>Teleskopik Mekanizmalı Masa Ayağı</li>
+                        <li>Gardolap</li>
+                        <li>Çok sayıda dolap ve saklama gözleri</li>
+                        <li>Bas-çek dolap kulpları</li>
+                    </ul> 
+                </td>
+            </tr>
+            <tr>
+                <td>Isıtma Sistemleri</td>
+                <td>
+                    <ul>
+                        <li>Dizel Isıtıcı</li>
+                        <li>Elektrikli Isıtma</li>
+                        <li>Gazlı ısıtma</li>
+                        <li>Güneş Paneli</li>
+                        <li>Ortam ısıtıcısı Webasto</li>
+                        <li>Odun sobası için baca çıkışı</li>
+                    </ul> 
+                </td>
+            </tr>
+            <tr>
+                <td>Elektrik Tesisatı</td>
+                <td>
+                    <ul> 
+                        <li>Her anahtar ve prizlere 3x2.5 ve 2x2.5 kablo ile ayrı hat çekilmiştir.</li>
+                        <li>Dış enerji girişi (220V- 240V)</li>
+                        <li>10 adet 220 volt topraklı priz</li>   
+                        <li>8 adet 12V USB</li>   
+                        <li>3 KW tam dalga sinüs inverter</li>   
+                        <li>AC-DC akü sarj chazı (araç çalışır haldeyken aküyü sarj eder.)</li>
+                        <li>4 tane 455 Watt güneş paneli</li>
+                        <li>2 tane 100 Ah Amper lityum pil</li>            
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Aydınlatma Sistemi</td>
+                <td>
+                    <ul>
+                        <li>Dış aydınlatma 30 cm 2  adet 12 Volt LED</li>
+                        <li>Prenium İç spot aydınlatma</li>
+                        <li>12V üç çipli LED tavan Aydınlatması</li>
+                    </ul> 
+                </td>
+            </tr>
+            <tr>
+                <td>Gaz Sistemi</td>
+                <td>
+                    <ul>
+                        <li>40 litre LPG tankı</li>
+                        <li>Gaz Tesisatı</li>
+                        <li>Mono Kontrol CS Tüp Dedektörü</li>
+                        <li>Seyyar Barbekü İçin Portatif Gaz Çıkışı</li>
+                    </ul> 
+                </td>
+            </tr>
+            <tr>
+                <td>Banyo-WC-Su</td>
+                <td>
+                    <ul>
+                        <li>1 Ton 300 kg temiz su deposu</li>
+                        <li>Temiz su dolum noktası</li>
+                        <li>Toplam 1 Ton atık su deposu</li>
+                        <li>Mutfak</li>
+                        <li>Banyo ve Tuvalet için ayrı ayrı atık su deposu</li>
+                        <li>Klozet/WC</li>
+                        <li>Taharet musluğu</li>
+                        <li>80 x 80 cm duş teknesi</li>
+                        <li>12 V Hidrofor</li>
+                        <li>Dış Duş Ünitesi</li>
+                        <li>Su boşaltma Valfi</li>
+                        <li>Banyo dışı hilton lavabo</li>
+                    </ul> 
+                </td>
+            </tr>
+        </table>
+        <div class="pricing-section">
+            <div class="price-box">
+                <h3>Karavan'ın Fiyatı</h3>
+                <p>8.500.000 TL</p>
+            </div>
+            <div class="contact-box">
+                <h3>İletişim</h3>
+                <p>Taşkın KARS</p>
+                <p>0542 423 65 69</p>
+                <p>Keçiören/ANKARA </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="imageModal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <button class="nav-arrow left" onclick="navigateModal(-1)">&#10094;</button>
+        <div class="modal-content">
+            <img id="modalImg" style="display: none;">
+            <video id="modalVideo" style="display: none;" controls></video>
+        </div>
+        <button class="nav-arrow right" onclick="navigateModal(1)">&#10095;</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Satılık Karavan İlanları.</p>
+    </footer>
+
+    <script>
+        let currentIndex = 0;
+        const media = [
+            "photos/otobüs/karavan ön 1.JPG",
+            "photos/otobüs/karavan sağ.JPG",
+            "photos/otobüs/karavan sol.JPG",
+            "photos/otobüs/karavan_ön_2.JPG",
+            "photos/otobüs/karavan_sağ_pencere.JPG",
+            "photos/otobüs/karavan sürücü kısmı.JPG",
+            "photos/otobüs/sürücü_kısmı1.JPG",
+            "photos/otobüs/yatak_ışık2.JPG",
+            "photos/otobüs/yatak1.JPG",
+            "photos/otobüs/arka_pencere.JPG",
+            "photos/otobüs/askı.JPG",
+            "photos/otobüs/dolap2.JPG",
+            "photos/otobüs/karavan priz.JPG",
+            "photos/otobüs/ranza1.jpeg",
+            "photos/otobüs/ranza2.jpeg",
+            "photos/otobüs/basamak.JPG",
+            "photos/otobüs/beyaz eşyalar.JPG",
+            "photos/otobüs/bulaşık makinesi.JPG",
+            "photos/otobüs/çamaşır makinesi.JPG",
+            "photos/otobüs/fırın.JPG",
+            "photos/otobüs/beyaz eşya.JPG",
+            "photos/otobüs/mutfak.JPG",
+            "photos/otobüs/havalandırma.JPG",
+            "photos/otobüs/lavabo ayna.JPG",
+            "photos/otobüs/üst_dolap.JPG",
+            "photos/otobüs/üst_dolap2.JPG",
+            "photos/otobüs/üst_dolap_açık.JPG",
+            "photos/otobüs/üst_dolap_açık2.JPG",
+            "photos/otobüs/sigorta kontrol.JPG",
+            "photos/otobüs/depo göstergeleri.JPG",
+            "photos/otobüs/piller depo sigorta.JPG",
+            "photos/otobüs/piller.JPG",
+            "photos/otobüs/sigorta.JPG",
+            "photos/otobüs/güneş_paneli.JPG",
+            "photos/otobüs/teras.JPG",
+            "photos/otobüs/teras2.JPG",
+            "photos/otobüs/karavan dış elektrik.JPG",
+            "photos/otobüs/karavan_dış_duş.JPG",
+            "photos/otobüs/karavan_dış_duş2.JPG",
+            "photos/otobüs/dış masa.jpg",
+            "photos/otobüs/perde.jpg",
+            "videos/otobüs/iç mekan.mp4",
+            "videos/otobüs/iç mekan 2.mp4",
+        ];
+        const mediaPerPage = 4; // Number of media shown at once
+
+        // Function to display a set of media
+        function displayMedia() {
+            const gallery = document.getElementById("gallery");
+            gallery.innerHTML = ""; // Clear current gallery
+
+            // Add navigation buttons
+            gallery.innerHTML = `
+                <button class="nav-arrow left" onclick="navigate(-1)">&#10094;</button>
+                <button class="nav-arrow right" onclick="navigate(1)">&#10095;</button>
+            `;
+
+            // Show the media from currentIndex to currentIndex + mediaPerPage
+            for (let i = currentIndex; i < currentIndex + mediaPerPage && i < media.length; i++) {
+                const mediaItem = media[i];
+                if (mediaItem.endsWith(".mp4")) {
+                    // For videos, add a play icon overlay
+                    gallery.innerHTML += `
+                        <div class="video-container" onclick="openModal(${i})">
+                            <video>
+                                <source src="${mediaItem}" type="video/mp4">
+                            </video>
+                            <div class="play-icon">▶️</div>
+                        </div>
+                    `;
+                } else {
+                    // For images, display normally
+                    gallery.innerHTML += `
+                        <img src="${mediaItem}" alt="Caravan Photo ${i + 1}" onclick="openModal(${i})">
+                    `;
+                }
+            }
+        }
+
+        // Navigate through the gallery
+        function navigate(direction) {
+            currentIndex += direction * mediaPerPage;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= media.length) currentIndex = media.length - mediaPerPage;
+            displayMedia();
+        }
+
+        // Open modal with selected media
+        function openModal(index) {
+            currentIndex = index;
+            updateModal();
+            document.getElementById("imageModal").classList.add("show");
+        }
+
+        // Close modal
+        function closeModal() {
+            const modalVideo = document.getElementById("modalVideo");
+            if (modalVideo) {
+                modalVideo.pause(); // Pause the video
+                modalVideo.src = ""; // Clear the video source
+            }
+            document.getElementById("imageModal").classList.remove("show");
+        }
+
+        // Navigate through media in the modal
+        function navigateModal(direction) {
+            currentIndex = (currentIndex + direction + media.length) % media.length;
+            updateModal();
+        }
+
+        // Update modal content
+        function updateModal() {
+            const modalImg = document.getElementById("modalImg");
+            const modalVideo = document.getElementById("modalVideo");
+            if (media[currentIndex].endsWith(".mp4")) {
+                modalImg.style.display = "none";
+                modalVideo.style.display = "block";
+                modalVideo.src = media[currentIndex];
+                modalVideo.play(); // Autoplay the video when it's opened
+            } else {
+                modalImg.style.display = "block";
+                modalVideo.style.display = "none";
+                modalImg.src = media[currentIndex];
+            }
+        }
+
+        // Initial load of the first set of media
+        displayMedia();
+    </script>
+</body>
+</html>
